@@ -1,4 +1,4 @@
-#!/usr/bin/python2
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 from datetime import datetime
 import logging
@@ -7,13 +7,15 @@ import re
 
 from bs4 import BeautifulSoup
 from googletrans import Translator
+import netrc
 import requests
+from requests_ntlm import HttpNtlmAuth
 from telegram.ext import CommandHandler, Updater
 
 logging.basicConfig(format="%(asctime)s - %(name)s - %(levelname)s - %(message)s", level=logging.INFO)
 log = logging.getLogger(__name__)
 
-WEEK_MENU_URL = ("http://www.nordiccatering.dk/ugens-frokostmenu.aspx")
+WEEK_MENU_URL = ("http://fossportal/companies/Denmark/kantinedk/Pages/Kantinerne-i-Hiller%C3%B8d.aspx")
 WEEK_DAYS = ["mandag", "tirsdag", "onsdag", "torsdag", "fredag"]
 
 
@@ -23,7 +25,7 @@ def find_menu_in_text(text):
     menus = {}
     for line in text.splitlines():
         found_day = False
-        if "Der tages forbehold" in line:
+        if "Ved tvivl om allergener" in line:
             menus[current_day] = menu_lines
             return menus
         else:
@@ -43,7 +45,8 @@ def find_menu_in_text(text):
 
 
 def get_menus():
-    menu_response = requests.get(WEEK_MENU_URL)
+    auth_info = netrc.netrc().hosts["fossportal"]
+    menu_response = requests.get(WEEK_MENU_URL, auth=HttpNtlmAuth(auth_info[0], auth_info[2]))
     if menu_response.status_code == 200:
         menu_html = menu_response.text
         soup = BeautifulSoup(menu_html, "html.parser")
@@ -103,7 +106,7 @@ def bot_menu(bot, update):
         try:
             header, menu = translate(header, menu, translate_to)
         except ValueError as exp:
-            print "Exception occured: {}".format(exp)
+            print("Exception occured: {}").format(exp)
             bot.send_message(chat_id=update.message.chat_id, text=u"Ukendt sprog. Brug ISO639-1 landekode")
             return
     bot.send_message(chat_id=update.message.chat_id, text=u"{}:\t\n{}".format(header, "\t\n".join(allergies_to_emoji(menu))))
@@ -116,12 +119,13 @@ def error_handler(bot, update, telegram_error):
 def start(bot, update):
     user = update.message.from_user.username
     bot.send_message(chat_id=update.message.chat_id,
-                     text="Hej @{0}, Jeg er Nordic Catering Bot\n"
+                     text="Hej @{0}, Jeg er Glad Mad Bot\n"
                           "Brug /menu kommandoen for at se dagens menu\n"
                           "Brug /menu <lang> for dages menu på sproget <lang>".format(user))
 
 
 if __name__ == "__main__":
+    print("Menus: {}".format(get_menus()))
     bot_token = os.environ['BOT_TOKEN']
     updater = Updater(token=bot_token)
 
