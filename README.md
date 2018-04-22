@@ -1,6 +1,6 @@
-# Nordic Catering Telegram bot
+# Foss Glad Mad Telegram bot
 
-[![Build Status](https://travis-ci.org/Larsjep/telegram-nordicbot.png)](https://travis-ci.org/Larsjep/telegram-nordicbot)
+[![Build Status](https://travis-ci.org/Larsjep/telegram-nordicbot.png)](https://travis-ci.org/Larsjep/telegram-gladmadbot)
 
-Telegram bot for showing todays menu from [Nordic Catering](http://www.nordiccatering.dk)
+Telegram bot for showing todays menu from [Glad Mad](http://www.gladmad.dk)
 
