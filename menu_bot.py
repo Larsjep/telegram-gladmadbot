@@ -106,8 +106,8 @@ def bot_menu(bot, update):
         try:
             header, menu = translate(header, menu, translate_to)
         except ValueError as exp:
-            print("Exception occured: {}").format(exp)
-            bot.send_message(chat_id=update.message.chat_id, text=u"Ukendt sprog. Brug ISO639-1 landekode")
+            print("Exception occured: {}".format(exp))
+            bot.send_message(chat_id=update.message.chat_id, text=u"Ukendt sprog. Brug ISO639-1 landekode. https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes")
             return
     bot.send_message(chat_id=update.message.chat_id, text=u"{}:\t\n{}".format(header, "\t\n".join(allergies_to_emoji(menu))))
 
