@@ -83,7 +83,7 @@ def allergies_to_emoji(menu_items):
         return "".join([letter_to_emoji(x) for x in letters])
 
     def do_replace(text):
-        return re.sub("\(([GLN,]+)\)", convert_letters, text)
+        return re.sub("\\(([GLN,]+)\\)", convert_letters, text)
     return [do_replace(t) for t in menu_items]
 
 
