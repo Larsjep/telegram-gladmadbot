@@ -16,7 +16,7 @@ Torsdag:
             Båndsalat
         Pålæg
             Slæbesild
-Der tages forbehold for ændringer i menuen, såfremt de rette råvarer ikke kan fremskaffes.
+Der tages forbehold for ændringer i menuen, Ved tvivl om allergener.
 """
         menu = menu_bot.find_menu_in_text(text)
 
